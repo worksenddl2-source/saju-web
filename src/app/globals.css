@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #050510;
+  --foreground: #e6e3d8;
+  --gold: #d4af37;
+  --gold-bright: #ffd76a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --font-sans: var(--font-sans-kr);
+  --font-serif: var(--font-serif-kr);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans-kr), system-ui, sans-serif;
+  word-break: keep-all;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+@keyframes flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  33% { transform: scaleY(1.12) scaleX(0.94); }
+  66% { transform: scaleY(0.92) scaleX(1.05); }
+}
+@keyframes wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-200px); }
+}
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(120px); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(1.2deg); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.twinkle { animation: twinkle 3.5s ease-in-out infinite; }
+.float { animation: float 5s ease-in-out infinite; }
+.float-slow { animation: float 9s ease-in-out infinite; }
+.pulse { animation: pulse-soft 3s ease-in-out infinite; }
+.flicker { animation: flicker 1.6s ease-in-out infinite; }
+.wave { animation: wave 6s linear infinite; }
+.drift { animation: drift 24s ease-in-out infinite; }
+.sway { animation: sway 6s ease-in-out infinite; }
+.rise { animation: rise 0.7s ease-out both; }
+.spin-slow { animation: spin 18s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
 }

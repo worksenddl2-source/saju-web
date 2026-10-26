@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 오행 수호신 평생사주
 
-## Getting Started
+생년월일과 태어난 시간을 입력하면 사주팔자와 오행을 계산해 평생사주를 17개 항목으로 풀어주는 웹앱입니다.
+결과마다 배경과 캐릭터가 달라져서, 어두운 사주는 어둡게, 밝은 사주는 밝게 보입니다.
 
-First, run the development server:
+**사이트 주소**: https://worksenddl2-source.github.io/saju-web/
+
+## 주요 기능
+
+- **대화형 입력**: 수호신 예언자가 이름 → 성별 → 생년월일(양력·음력·윤달) → 태어난 시간을 차례로 묻습니다.
+- **해독 연출**: 60갑자가 도는 원형 연출이 약 3초 동안 나온 뒤 결과가 열립니다.
+- **사주명식**: 년주·월주·일주·시주의 천간·지지, 십신, 띠를 보여줍니다. 태어난 시간을 모르면 시주를 빼고 6글자로 계산합니다.
+- **오행 분석**: 목·화·토·금·수 개수, 가장 강한 기운과 비어 있는 기운, 일간의 강약(신강·신약)을 보여줍니다.
+- **풀이 17개 항목**: 총평, 초년운, 중년운, 말년운, 건강운, 체질운, 사회운, 사회적성격, 성격운, 타고난 성향, 타고난 인품, 이성운, 애정운, 재물운, 재물모으는법, 재물손실 막는법, 재테크비법. 항목마다 좋음·보통·주의 표시가 붙습니다.
+- **맞춤 배경과 캐릭터**
+
+| 정하는 기준 | 바뀌는 것 |
+| --- | --- |
+| 가장 강한 오행 | 배경 장면: 목 숲, 화 불꽃의 노을, 토 대지와 산, 금 달빛 바위산, 수 밤바다 |
+| 오행의 균형 | 분위기: 고르면 맑음, 중간이면 고요함, 크게 치우치거나 두 가지 이상 비면 어둠(붉은 달, 안개) |
+| 일간 오행 | 수호신: 청룡(목), 주작(화), 황룡(토), 백호(금), 현무(수). 분위기에 따라 눈빛과 빛이 달라집니다 |
+
+## 실행 방법
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # 개발 서버: http://localhost:3000
+npm run build:html   # 서버 없이 열리는 HTML 한 장 만들기: dist/index.html
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`master` 브랜치에 push하면 GitHub Actions(`.github/workflows/pages.yml`)가 `dist/index.html`을 만들어 GitHub Pages에 자동으로 배포합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 폴더 구조
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 경로 | 역할 |
+| --- | --- |
+| `src/lib/saju.ts` | 만세력 계산(lunar-javascript), 십신, 오행 개수, 신강·신약, 분위기 판정 |
+| `src/lib/readings.ts` | 일간·오행·십신 조합으로 17개 항목 풀이 문장을 만듭니다 (모든 문장은 직접 작성) |
+| `src/lib/theme.ts` | 오행 5 × 분위기 3 = 15가지 배경 색 조합 |
+| `src/components/Scene.tsx` | 결과 배경 SVG (해·달·별·지형·파도·불꽃·안개 애니메이션) |
+| `src/components/Oracle.tsx` | 수호신 예언자 캐릭터 SVG |
+| `src/components/SajuForm.tsx` | 대화형 입력 폼과 해독 연출 |
+| `src/components/HomeView.tsx` | 첫 화면 |
+| `src/components/ResultView.tsx` | 결과 화면 (사주명식, 오행 분석, 풀이 카드) |
+| `src/app/` | Next.js 페이지 (`/`, `/result`) |
+| `src/standalone/main.tsx` | 서버 없이 동작하는 HTML 버전의 진입점 |
+| `scripts/build-standalone.mjs` | 사이트 전체를 `dist/index.html` 한 파일로 묶는 스크립트 |
 
-## Learn More
+## 알려진 한계
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 음력 변환은 중국 음력 기준이라 한국 음력과 드물게 하루 차이가 날 수 있습니다.
+- 캐릭터와 배경은 직접 그린 단순한 SVG입니다. 일러스트로 바꾸는 작업은 이후 단계로 남겨 두었습니다.
+- 풀이는 정해진 규칙으로 문장을 조합합니다. 재미로 보는 참고용 콘텐츠입니다.
